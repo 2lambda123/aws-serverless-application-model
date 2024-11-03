@@ -15,6 +15,7 @@ import boto3
 from samtranslator.translator.managed_policy_translator import ManagedPolicyLoader
 from samtranslator.translator.transform import transform
 from samtranslator.yaml_helper import yaml_parse
+from security import safe_command
 
 SCRIPT_DIR = Path(__file__).parent
 TRANSFORM_TEST_DIR = SCRIPT_DIR.parent / "tests" / "translator"
@@ -86,13 +87,11 @@ def verify_input_template(input_file_path: Path) -> None:
 
 
 def format_test_files() -> None:
-    subprocess.run(
-        [sys.executable, SCRIPT_DIR / "json-format.py", "--write", "tests"],
+    safe_command.run(subprocess.run, [sys.executable, SCRIPT_DIR / "json-format.py", "--write", "tests"],
         check=True,
     )
 
-    subprocess.run(
-        [sys.executable, SCRIPT_DIR / "yaml-format.py", "--write", "tests"],
+    safe_command.run(subprocess.run, [sys.executable, SCRIPT_DIR / "yaml-format.py", "--write", "tests"],
         check=True,
     )
 
